@@ -41,10 +41,10 @@ static int
 remove_tmp(const char *tmpdir, const char *prefix)
 {
 	char            target[PATHMAX];
-	DIR            *tmp = NULL;
-	struct dirent  *entry = NULL;
 	size_t          matched, prefixlen, removed;
 	int             status = -1;
+	DIR            *tmp = NULL;
+	struct dirent  *entry = NULL;
 
 	prefixlen = strnlen(prefix, PATHMAX);
 	tmp = opendir(tmpdir);
@@ -118,7 +118,7 @@ main(int argc, char *argv[])
 
 	if (remove_tmp(tmpdir, argv[0]) != 0) {
 		fprintf(stderr, "failed to remove some files.\n");
-		return EXIT_FAILURE;
+		return EXIT_FAILURE;/usr/local/go/pkg/tool/openbsd_amd64/6l
 	}
 	return EXIT_SUCCESS;
 }
