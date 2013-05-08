@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sysexits.h>
+#include <unistd.h>
 
 
 #define TMP_DIR "/tmp"
@@ -68,6 +69,7 @@ remove_tmp(const char *prefix)
 			    (long unsigned)removed);
 	}
 	printf("[+] removed %lu files\n", (long unsigned)removed);
+	return status;
 }
 
 /*
