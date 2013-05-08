@@ -1,0 +1,43 @@
+[ rmtmp: remove temporary files ]
+
+I was prototyping a project that was creating a temporary file for
+every second in a certain time range of timestamps, running through
+about 4500 timestamps / second. However, I managed to forget to clean
+up those temporary files, leaving me with over three million temp files
+in my /tmp. find(1) was taking entirely too long at about 300 files per
+minute, so while it was running, I hacked together a custom utility
+in C to do it much faster. It removed about two million files in under
+five minutes.
+
+In short, rmtmp(1) steps through the directory entry for /tmp. When it
+finds a regular file, it checks to see if it starts with the prefix
+passed in; if so, that file is removed.
+
+This is a fairly trivial utility that took about fifteen minutes to
+write, and it's aimed at a specific use case. It is being distributed
+in the offchance others find it useful.
+
+
+usage:
+	rmtmp <prefix>
+
+for example, if your program has called mkstemp("myprogXXXXXX"):
+	rmtmp myprog
+will remove all of the temporary files generated.
+
+
+rmtmp(1) is released under the ISC license:
+
+Copyright (c) 2013 Kyle Isom <kyle@tyrfingr.is>
+
+Permission to use, copy, modify, and distribute this software for any
+purpose with or without fee is hereby granted, provided that the above 
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
