@@ -18,7 +18,13 @@ install:V:$TARG
 	install $TARG $BIN
 	install $TARG.1 $MAN
 
-installall:
+installall:V:install
+
+uninstall:V:
+        rm -f $BIN/$TARG
+        rm -f $MAN/$TARG.1
+
+uninstallall:V:uninstall
 
 clean:V:
 	rm -f *.o $TARG *core*
