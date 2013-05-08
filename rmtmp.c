@@ -40,10 +40,10 @@ static int      verbose = 0;
 static int
 remove_tmp(const char *tmpdir, const char *prefix)
 {
-	char            target[PATHMAX];
-	size_t          matched, prefixlen, removed;
-	int             status = -1;
-	DIR            *tmp = NULL;
+	char	    target[PATHMAX];
+	size_t	  matched, prefixlen, removed;
+	int	     status = -1;
+	DIR	    *tmp = NULL;
 	struct dirent  *entry = NULL;
 
 	prefixlen = strnlen(prefix, PATHMAX);
@@ -84,8 +84,8 @@ remove_tmp(const char *tmpdir, const char *prefix)
 int
 main(int argc, char *argv[])
 {
-	char           *tmpdir = NULL;
-	int             opt;
+	char	   *tmpdir = NULL;
+	int	     opt;
 
 	if (argc == 1) {
 		fprintf(stderr, "no prefix given\n");
