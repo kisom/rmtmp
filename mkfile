@@ -21,10 +21,9 @@ install:V:$TARG
 installall:
 
 clean:V:
-	rm -f *.o
+	rm -f *.o $TARG *core*
 
 nuke:V:clean
-	rm -f $TARG
 
 %.o: %.c
 	$CC $CFLAGS -c $stem.c

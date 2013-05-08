@@ -6,6 +6,8 @@
 .Nd remove temporary files
 .Sh SYNOPSIS
 .Nm
+.Op .Fl d .Ar tmpdir
+.Op Fl v
 .Ar prefix
 .Sh DESCRIPTION
 .Nm
@@ -13,6 +15,15 @@ steps through the directory entry for
 .Pa /tmp .
 When it finds a regular file, it checks to see if it starts with the prefix
 passed in; if so, that file is removed.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl d Ar tmpdir
+Specify the temporary directory. The default value is "/tmp".
+.It Fl v
+Select verbose mode. In verbose mode, every 1000 files,
+.Nm
+prints the current number of files removed.
+.El
 .\" .Sh RETURN VALUES
 .\" For sections 2, 3, & 9 only.
 .\" .Sh ENVIRONMENT

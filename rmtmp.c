@@ -32,25 +32,26 @@
 #endif
 
 
+static int	verbose = 0;
+
 /*
  * remove_tmp contains all the actual search-and-destroy code.
  */
 static int
-remove_tmp(const char *prefix)
+remove_tmp(const char *tmpdir, const char *prefix)
 {
 	char	    target[PATHMAX];
 	DIR	    *tmp = NULL;
 	struct dirent  *entry = NULL;
-	size_t	  removed,
-			prefixlen;
+	size_t	  matched, prefixlen, removed;
 	int	     status = -1;
 
 	prefixlen = strnlen(prefix, PATHMAX);
-	tmp = opendir(TMP_DIR);
-	removed = 0;
+	tmp = opendir(tmpdir);
+	matched = removed = 0;
 
 	if (NULL == tmp) {
-		err(EX_OSERR, "couldn't open %s", TMP_DIR);
+		err(EX_OSERR, "couldn't open %s", tmpdir);
 	}
 
 	while (NULL != (entry = readdir(tmp))) {
@@ -59,16 +60,19 @@ remove_tmp(const char *prefix)
 		else if (strncmp(entry->d_name, prefix, prefixlen) != 0)
 			continue;
 		snprintf(target, PATHMAX, "%s/%s", TMP_DIR, entry->d_name);
+		matched++;
 		status = unlink(target);
 		if (status != 0)
 			warn("unlink %s", target);
 		else
 			removed++;
-		if (removed > 0 && (removed % 1000) == 0)
-			printf("[+] removed %lu files\n",
+		if (verbose && removed > 0 && (removed % 1000) == 0)
+			printf("removed %lu files\n",
 			    (long unsigned)removed);
 	}
-	printf("[+] removed %lu files\n", (long unsigned)removed);
+	printf("removed %lu files\n", (long unsigned)removed);
+	if (matched == removed)
+		status = 0;
 	return status;
 }
 
@@ -79,12 +83,42 @@ remove_tmp(const char *prefix)
  * dumped there.
  */
 int
-main(int argc, const char *argv[])
+main(int argc, char *argv[])
 {
+	char *tmpdir = NULL;
+	int    opt;
+
 	if (argc == 1) {
 		fprintf(stderr, "no prefix given\n");
 		return EXIT_FAILURE;
-	} else if (remove_tmp(argv[1]) != 0) {
+	}
+
+	while ((opt = getopt(argc, (char * const*)argv, "d:v")) != -1) {
+		switch (opt) {
+		case 'd':
+			tmpdir = optarg;
+			break;
+		case 'v':
+			verbose = 1;
+			break;
+		default:
+			/* NOT REACHED */
+			fprintf(stderr, "invalid argument!\n");
+			return EXIT_FAILURE;
+		}
+	}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc > 1)
+		fprintf(stderr, "warning: multiple prefixes selected, "
+                                "but only the first will be used.\n");
+
+	if (NULL == tmpdir)
+		tmpdir = (char *)TMP_DIR;
+
+	if (remove_tmp(tmpdir, argv[0]) != 0) {
 		fprintf(stderr, "failed to remove some files.\n");
 		return EXIT_FAILURE;
 	}
