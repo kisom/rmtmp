@@ -1,0 +1,40 @@
+.Dd $Mdocdate$
+.Dt RMTMP 1
+.Os
+.Sh NAME
+.Nm rmtmp
+.Nd remove temporary files
+.Sh SYNOPSIS
+.Nm
+.Ar prefix
+.Sh DESCRIPTION
+.Nm
+steps through the directory entry for 
+.Pa /tmp .
+When it finds a regular file, it checks to see if it starts with the prefix
+passed in; if so, that file is removed.
+.\" .Sh RETURN VALUES
+.\" For sections 2, 3, & 9 only.
+.\" .Sh ENVIRONMENT
+.\" For sections 1, 6, 7, & 8 only.
+.\" .Sh FILES
+.\" .Sh EXIT STATUS
+.\" For sections 1, 6, & 8 only.
+.\" .Sh EXAMPLES
+.\" .Sh DIAGNOSTICS
+.\" For sections 1, 4, 6, 7, & 8 only.
+.\" .Sh ERRORS
+.\" For sections 2, 3, & 9 only.
+.\" .Sh SEE ALSO
+.Sh STANDARDS
+.Nm
+conforms to ANSI C and the SUSv4.
+.\" .Sh HISTORY
+.Sh AUTHORS
+.Nm
+was written by
+.An Kyle Isom Aq Mt kyle@tyrfingr.is .
+\.".Sh CAVEATS
+.Sh BUGS
+Please report all bugs to the author.
+
