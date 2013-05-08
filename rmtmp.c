@@ -118,7 +118,7 @@ main(int argc, char *argv[])
 
 	if (remove_tmp(tmpdir, argv[0]) != 0) {
 		fprintf(stderr, "failed to remove some files.\n");
-		return EXIT_FAILURE;/usr/local/go/pkg/tool/openbsd_amd64/6l
+		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
