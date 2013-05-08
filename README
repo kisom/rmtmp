@@ -19,11 +19,14 @@ in the offchance others find it useful.
 
 
 usage:
-	rmtmp <prefix>
+	rmtmp [-d tmpdir] [-v] <prefix>
 
 for example, if your program has called mkstemp("myprogXXXXXX"):
 	rmtmp myprog
-will remove all of the temporary files generated.
+will remove all of the temporary files generated. The -d flag allows the
+user to specify the temporary directory the temp files are stored in. The
+-v flag tells rmtmp(1) to use verbose mode, reporting the number of
+files removed every 1000 files.
 
 
 rmtmp(1) is released under the ISC license:
