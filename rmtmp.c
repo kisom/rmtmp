@@ -34,7 +34,7 @@
 
 
 extern char	*__progname;
-static int       verbose = 0;
+static int	 verbose = 0;
 
 
 /*
@@ -71,7 +71,7 @@ remove_tmp(const char *tmpdir, const char *prefix)
 {
 	char		 target[PATHMAX];
 	size_t		 prefixlen;
-	long unsigned	 matched,removed;
+	long unsigned	 matched, removed;
 	int		 status = -1;
 	DIR		*tmp = NULL;
 	struct dirent	*entry = NULL;
@@ -163,7 +163,6 @@ main(int argc, char *argv[])
 			tmpdir = (char *)TMP_DIR;
 	}
 
-	printf("temporary directory: %s\n", tmpdir);
 	if (remove_tmp(tmpdir, argv[0]) != 0) {
 		fprintf(stderr, "failed to remove some files.\n");
 		return EXIT_FAILURE;
