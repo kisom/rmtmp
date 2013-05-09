@@ -7,7 +7,9 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl d Ar tmpdir
+.Op Fl h
 .Op Fl v
+.Op Fl V
 .Ar prefix
 .Sh DESCRIPTION
 .Nm
@@ -19,8 +21,12 @@ passed in; if so, that file is removed.
 .Bl -tag -width Ds
 .It Fl d Ar tmpdir
 Specify the temporary directory. The default value is "/tmp".
+.It Fl h
+Print a short usage message.
 .It Fl v
 Select verbose mode. In verbose mode, every 1000 files,
+.It Fl V
+Print the program version and exit.
 .Nm
 prints the current number of files removed.
 .El

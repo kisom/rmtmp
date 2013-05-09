@@ -26,13 +26,42 @@
 #include <unistd.h>
 
 
+#define RMTMP_VERSION	"1.0.0"
 #define TMP_DIR "/tmp"
 #ifndef PATHMAX
 #define PATHMAX 1024
 #endif
 
 
-static int      verbose = 0;
+extern char	*__progname;
+static int       verbose = 0;
+
+
+/*
+ * Print the program's version.
+ */
+static void
+version(void)
+{
+	printf("%s version %s\n", __progname, RMTMP_VERSION);
+}
+
+
+/*
+ * Print a short usage message.
+ */
+static void
+usage(void)
+{
+	version();
+	printf("\nusage: %s [-d tmpdir] [-hv] prefix\n", __progname);
+	printf("\t-d tmpdir\tdirectory containing temporary files\n");
+	printf("\t-h\t\tprint this usage message and exit\n");
+	printf("\t-v\t\tverbose mode\n");
+	printf("\t-V\t\tprint the program's version\n\n");
+	exit(EX_USAGE);
+}
+
 
 /*
  * remove_tmp contains all the actual search-and-destroy code.
@@ -75,6 +104,7 @@ remove_tmp(const char *tmpdir, const char *prefix)
 	return status;
 }
 
+
 /*
  * rmtmp searches /tmp for a temporary files created with a certain prefix,
  * for example via mkstemp(3) and removes them. It is designed to clean up
@@ -85,20 +115,27 @@ int
 main(int argc, char *argv[])
 {
 	char	   *tmpdir = NULL;
-	int	     opt;
+	int	    opt;
 
 	if (argc == 1) {
 		fprintf(stderr, "no prefix given\n");
 		return EXIT_FAILURE;
 	}
-	while ((opt = getopt(argc, (char *const *) argv, "d:v")) != -1) {
+	while ((opt = getopt(argc, (char *const *) argv, "d:hvV")) != -1) {
 		switch (opt) {
 		case 'd':
 			tmpdir = optarg;
 			break;
+		case 'h':
+			usage();
+			/* NOT REACHED */
+			break;
 		case 'v':
 			verbose = 1;
 			break;
+		case 'V':
+			version();
+			exit(EX_USAGE);
 		default:
 			/* NOT REACHED */
 			fprintf(stderr, "invalid argument!\n");
