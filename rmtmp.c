@@ -26,7 +26,7 @@
 #include <unistd.h>
 
 
-#define RMTMP_VERSION	"1.0.0"
+#define RMTMP_VERSION	"1.0.1"
 #define TMP_DIR "/tmp"
 #ifndef PATHMAX
 #define PATHMAX 1024
@@ -43,7 +43,7 @@ static int       verbose = 0;
 static void
 version(void)
 {
-	printf("%s version %s\n", __progname, RMTMP_VERSION);
+    printf("%s version %s\n", __progname, RMTMP_VERSION);
 }
 
 
@@ -69,36 +69,43 @@ usage(void)
 static int
 remove_tmp(const char *tmpdir, const char *prefix)
 {
-	char	    target[PATHMAX];
-	size_t	  matched, prefixlen, removed;
-	int	     status = -1;
-	DIR	    *tmp = NULL;
-	struct dirent  *entry = NULL;
+	char		 target[PATHMAX];
+	size_t		 prefixlen;
+	long unsigned	 matched,removed;
+	int		 status = -1;
+	DIR		*tmp = NULL;
+	struct dirent	*entry = NULL;
 
 	prefixlen = strnlen(prefix, PATHMAX);
 	tmp = opendir(tmpdir);
 	matched = removed = 0;
 
-	if (NULL == tmp) {
-		err(EX_OSERR, "couldn't open %s", tmpdir);
-	}
+	if (NULL == tmp)
+	    err(EX_OSERR, "couldn't open %s", tmpdir);
+
 	while (NULL != (entry = readdir(tmp))) {
 		if (entry->d_type != DT_REG)
 			continue;
-		else if (strncmp(entry->d_name, prefix, prefixlen) != 0)
+		if (strncmp(entry->d_name, prefix, prefixlen) != 0)
 			continue;
-		snprintf(target, PATHMAX, "%s/%s", TMP_DIR, entry->d_name);
+		snprintf(target, sizeof(target), "%s/%s", tmpdir,
+		    entry->d_name);
 		matched++;
-		status = unlink(target);
-		if (status != 0)
+
+		if (unlink(target) != 0) {
 			warn("unlink %s", target);
-		else
-			removed++;
+			continue;
+		}
+
+		removed++;
 		if (verbose && removed > 0 && (removed % 1000) == 0)
-			printf("removed %lu files\n",
-			       (long unsigned) removed);
+			printf("removed %lu files\n", removed);
 	}
-	printf("removed %lu files\n", (long unsigned) removed);
+
+	if (closedir(tmp) == -1)
+		warn("couldn't close %s", tmpdir);
+
+	printf("removed %lu files\n", removed);
 	if (matched == removed)
 		status = 0;
 	return status;
@@ -114,13 +121,14 @@ remove_tmp(const char *tmpdir, const char *prefix)
 int
 main(int argc, char *argv[])
 {
-	char	   *tmpdir = NULL;
-	int	    opt;
+	char	*tmpdir = NULL;
+	int	 opt;
 
 	if (argc == 1) {
 		fprintf(stderr, "no prefix given\n");
 		return EXIT_FAILURE;
 	}
+
 	while ((opt = getopt(argc, (char *const *) argv, "d:hvV")) != -1) {
 		switch (opt) {
 		case 'd':
@@ -148,11 +156,14 @@ main(int argc, char *argv[])
 
 	if (argc > 1)
 		fprintf(stderr, "warning: multiple prefixes selected, "
-			"but only the first will be used.\n");
+		    "but only the first will be used.\n");
 
-	if (NULL == tmpdir)
-		tmpdir = (char *) TMP_DIR;
+	if (NULL == tmpdir) {
+		if ((NULL == (tmpdir = getenv("TMPDIR"))) || (*tmpdir == '\0'))
+			tmpdir = (char *)TMP_DIR;
+	}
 
+	printf("temporary directory: %s\n", tmpdir);
 	if (remove_tmp(tmpdir, argv[0]) != 0) {
 		fprintf(stderr, "failed to remove some files.\n");
 		return EXIT_FAILURE;

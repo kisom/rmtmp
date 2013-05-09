@@ -2,8 +2,8 @@ TARG = rmtmp
 OFILES = rmtmp.o
 BIN = /usr/local/bin
 MAN = /usr/local/man/man1
-CC = gcc
-LD = gcc
+CC = clang
+LD = clang
 CFLAGS = -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align        \
 		-Wwrite-strings -Wmissing-prototypes -Wmissing-declarations   \
 		-Wnested-externs -Winline -Wno-long-long  -Wunused-variable   \
@@ -30,8 +30,18 @@ uninstallall:V:uninstall
 
 clean:V:
 	rm -f *.o $TARG *core*
+        rm -fr testdata
 
 nuke:V:clean
+
+testdata:V:
+        if [ ! -d testdata ]; then
+                mkdir testdata
+        fi
+        for i in $(seq 1 100000)
+        do
+                touch testdata/test$i
+        done
 
 %.o: %.c
 	$CC $CFLAGS -c $stem.c

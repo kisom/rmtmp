@@ -32,8 +32,14 @@ prints the current number of files removed.
 .El
 .\" .Sh RETURN VALUES
 .\" For sections 2, 3, & 9 only.
-.\" .Sh ENVIRONMENT
-.\" For sections 1, 6, 7, & 8 only.
+.Sh ENVIRONMENT
+.Nm
+checks for the presence of the
+.Ev TMPDIR
+environment variable, and if present, it will use this as
+the default temporary directory. This may still be overridden by the
+.Fl -d Ar tmpdir
+argument.
 .\" .Sh FILES
 .\" .Sh EXIT STATUS
 .\" For sections 1, 6, & 8 only.
@@ -51,7 +57,10 @@ conforms to ANSI C and the SUSv4.
 .Nm
 was written by
 .An Kyle Isom Aq Mt kyle@tyrfingr.is .
-\.".Sh CAVEATS
+.Sh CAVEATS
+It is up to the user to make sure that the contents of
+.Ev TMPDIR
+are sane, and will not overflow the program.
 .Sh BUGS
 Please report all bugs to the author.
 
