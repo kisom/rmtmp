@@ -4,18 +4,20 @@ BIN = /usr/local/bin
 MAN = /usr/local/man/man1
 CC = gcc
 LD = gcc
-CFLAGS = -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
-		-Wwrite-strings -Wmissing-prototypes -Wmissing-declarations	\
-		-Wnested-externs -Winline -Wno-long-long  -Wunused-variable	\
-		-Wstrict-prototypes -Werror -ansi -D_XOPEN_SOURCE=700		\
-		-D_BSD_SOURCE -ansi
+CFLAGS = -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align        \
+		-Wwrite-strings -Wmissing-prototypes -Wmissing-declarations   \
+		-Wnested-externs -Winline -Wno-long-long  -Wunused-variable   \
+		-Wstrict-prototypes -Werror -ansi -D_XOPEN_SOURCE=700         \
+		-D_BSD_SOURCE -ansi -static
 LDFLAGS = -static
 $TARG::$OFILES
 
 all::$TARG
 
 install:V:$TARG
+        install -d $BIN
 	install $TARG $BIN
+        install -d $MAN
 	install $TARG.1 $MAN
 
 installall:V:install
