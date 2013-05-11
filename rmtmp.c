@@ -26,7 +26,7 @@
 #include <unistd.h>
 
 
-#define RMTMP_VERSION	"1.0.2"
+#define RMTMP_VERSION	"1.0.3"
 #define TMP_DIR "/tmp"
 #ifndef PATHMAX
 #define PATHMAX 1024
