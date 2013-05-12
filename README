@@ -18,6 +18,10 @@ write, and it's aimed at a specific use case. It is being distributed
 in the offchance others find it useful.
 
 
+Building the code can be done with either make(1) or mk(1); while mk(1)
+is preferred, a Makefile has also been provided.
+
+
 usage:
 	rmtmp [-d tmpdir] [-v] <prefix>
 
